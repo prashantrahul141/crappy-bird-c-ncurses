@@ -73,6 +73,10 @@ int main() {
 
   // main game loop.
   while (runGame) {
+
+    // user input.
+    key_pressed = wgetch(window);
+
     // clears window.
     wclear(window);
 
@@ -84,7 +88,7 @@ int main() {
     // sleep : locks the fps at 60.
   }
 
-  // closes window.
+  // closes window and clears up ncurses stuff.
   endwin();
 
   return 0;
