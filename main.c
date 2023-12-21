@@ -1,9 +1,15 @@
 #include <curses.h>
 #include <stdbool.h>
+#include <stdint.h>
+#include <unistd.h>
 
-#define BIRD_SPRITE "**\n**"
-#define FPS 60
+#define BIRD_SPRITE "***"
+#define MAX_FPS 30
+#define ONE_SECOND 1000000
+#define ONE_SECOND_MS 1000
+#define KEY_ESC 27
 
+uint64_t frameCounter = 0;
 // @brief Vec2 acts as a 2 dimensional vector type.
 typedef struct Vec2 {
   double x, y;
