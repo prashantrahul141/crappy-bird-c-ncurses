@@ -80,12 +80,11 @@ int main() {
     // clears window.
     wclear(window);
 
-    print_bird(&bird);
-
     // refreshs window, obviously.
     refresh();
 
-    // sleep : locks the fps at 60.
+    // update frame counter.
+    frameCounter += 1;
   }
 
   // closes window and clears up ncurses stuff.
