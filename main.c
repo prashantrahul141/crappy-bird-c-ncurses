@@ -10,6 +10,7 @@
 #define KEY_ESC 27
 
 uint64_t frameCounter = 0;
+
 // @brief Vec2 acts as a 2 dimensional vector type.
 typedef struct Vec2 {
   double x, y;
@@ -25,7 +26,11 @@ typedef struct Bird {
 
 // @brief function to print the bird at its current position.
 // @param Bird Bird object
-void print_bird(Bird *_b) { printw("%s", _b->sprite); }
+void print_bird(WINDOW *w, Bird *_b) {
+  attron(A_BOLD);
+  mvwprintw(w, _b->pos.y, _b->pos.x, "%s", _b->sprite);
+  attroff(A_BOLD);
+}
 
 int main() {
   Bird bird = {"Crappy Bird", {0, 0}, {0, 0}, BIRD_SPRITE};
