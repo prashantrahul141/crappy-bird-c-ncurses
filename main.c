@@ -36,12 +36,39 @@ void print_frame_counter() { printw("%ld", frameCounter); }
 
 // entry point.
 int main() {
-  Bird bird = {"Crappy Bird", {0, 0}, {0, 0}, BIRD_SPRITE};
 
   // init window.
   WINDOW *window = initscr();
 
-  // flag for main game loop.
+  // disables stuff like line buffering, for now disabled because ctrl+c doesnt
+  // close the program if enabled.
+  // raw();
+  cbreak();
+
+  // disables eching of key press.
+  noecho();
+
+  // lets us poll keyboard events.
+  keypad(window, true);
+
+  // set initial cursor to 0
+  curs_set(0);
+
+  // timeouts user input.
+  wtimeout(window, ONE_SECOND_MS / MAX_FPS);
+
+  // max width and height of the window.
+  uint32_t maxY, maxX;
+  getmaxyx(window, maxY, maxX);
+
+  // init bird object.
+  Bird bird = {
+      "Crappy Bird", {(int)(maxY / 2), (int)(maxX / 2)}, {0, 0}, BIRD_SPRITE};
+
+  // User input.
+  int key_pressed = wgetch(window);
+
+  // main loop.
   bool runGame = true;
 
   // main game loop.
