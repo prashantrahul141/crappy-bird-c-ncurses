@@ -81,7 +81,14 @@ int main() {
     wclear(window);
 
     // refreshs window, obviously.
-    refresh();
+    wrefresh(window);
+
+    // drawing.
+    // print_frame_counter();
+    print_bird(window, &bird);
+
+    // sleep, locks the fps at FPS_MAX.
+    // usleep(ONE_SECOND / MAX_FPS);
 
     // update frame counter.
     frameCounter += 1;
