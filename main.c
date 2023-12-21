@@ -32,6 +32,9 @@ void print_bird(WINDOW *w, Bird *_b) {
   attroff(A_BOLD);
 }
 
+void print_frame_counter() { printw("%ld", frameCounter); }
+
+// entry point.
 int main() {
   Bird bird = {"Crappy Bird", {0, 0}, {0, 0}, BIRD_SPRITE};
 
