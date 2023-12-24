@@ -95,20 +95,19 @@ int main() {
       break;
     }
 
-    // if horizontal input is given.
-    if (key_pressed == KEY_LEFT || key_pressed == 'a' || key_pressed == 'A') {
-      bird.pos.x -= 1;
-    } else if (key_pressed == KEY_RIGHT || key_pressed == 'd' ||
-               key_pressed == 'D') {
-      bird.pos.x += 1;
+    // process user input.
+    if (key_pressed == KEY_SPACE && frameCounter - frameJumpedOn > 10) {
+      // if user presses space.
+      frameJumpedOn = frameCounter;
+      bird.vel.y = -JUMP_ACCELERATION;
+    } else {
+      // adding acceleration due to gravity to velocity.
+      bird.vel.y += GRAVITY;
     }
 
-    // if vertical input is given.
-    if (key_pressed == KEY_UP || key_pressed == 'w' || key_pressed == 'W') {
-      bird.pos.y -= 1;
-    } else if (key_pressed == KEY_DOWN || key_pressed == 's' ||
-               key_pressed == 'S') {
-      bird.pos.y += 1;
+    // clamping velocity.
+    if (bird.vel.y > MAX_Y_VELOCITY) {
+      bird.vel.y = MAX_Y_VELOCITY;
     }
 
     // drawing.
