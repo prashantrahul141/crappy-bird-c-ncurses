@@ -8,4 +8,4 @@ all:
 	$(CC) $(SOURCE_FILES) -o $(OUTPUT_BINARY) -l$(LIBS) $(FLAGS)
 
 test:
-	$(CC) $(SOURCE_FILES) -o $(OUTPUT_BINARY) -l$(LIBS) ; ./$(OUTPUT_BINARY) $(FLAGS)
+	$(CC) $(SOURCE_FILES) -o $(OUTPUT_BINARY) -l$(LIBS) $(FLAGS) ; ./$(OUTPUT_BINARY)
