@@ -110,6 +110,17 @@ int main() {
       bird.vel.y = MAX_Y_VELOCITY;
     }
 
+    // clamping position to screensize.
+    if (bird.pos.y > maxY - 2) {
+      bird.pos.y = maxY - 2;
+    } else if (bird.pos.y <= 1) {
+      bird.pos.y = 1;
+    }
+
+    // adding velocity to current position to get new position.
+    bird.pos.x += bird.vel.x;
+    bird.pos.y += bird.vel.y;
+
     // drawing.
     // print_frame_counter();
     print_bird(window, &bird);
