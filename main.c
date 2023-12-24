@@ -70,10 +70,11 @@ int main() {
   Bird bird = {"Crappy Bird", {0, (int)(maxY / 2)}, {0, 0}, BIRD_SPRITE};
 
   // User input.
-  int key_pressed = wgetch(window);
+  uint32_t key_pressed = wgetch(window);
 
   // main loop.
   bool runGame = true;
+  uint32_t frameJumpedOn = 0;
 
   // main game loop.
   while (runGame) {
@@ -88,7 +89,8 @@ int main() {
     wrefresh(window);
 
     // if esc is pressed
-    if (key_pressed == KEY_ESC || key_pressed == 'Q' || key_pressed == 'q') {
+    if ((uint32_t)key_pressed == KEY_ESC || key_pressed == 'Q' ||
+        key_pressed == 'q') {
       runGame = false;
       break;
     }
