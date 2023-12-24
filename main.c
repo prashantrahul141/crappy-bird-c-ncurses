@@ -7,7 +7,11 @@
 #define MAX_FPS 30
 #define ONE_SECOND 1000000
 #define ONE_SECOND_MS 1000
+#define GRAVITY 0.07
 #define KEY_ESC 27
+#define KEY_SPACE ' '
+#define JUMP_ACCELERATION 1.2
+#define MAX_Y_VELOCITY 1
 
 uint64_t frameCounter = 0;
 
@@ -51,7 +55,8 @@ int main() {
   // lets us poll keyboard events.
   keypad(window, true);
 
-  // set initial cursor to 0
+  // makes the cursor invisible.
+  // WARNING: Not supported by all terminals.
   curs_set(0);
 
   // timeouts user input.
@@ -113,7 +118,7 @@ int main() {
     // usleep(ONE_SECOND / MAX_FPS);
 
     // update frame counter.
-    frameCounter += 1;
+    frameCounter++;
   }
 
   // closes window and clears up ncurses stuff.
