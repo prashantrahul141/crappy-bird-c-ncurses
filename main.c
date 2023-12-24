@@ -67,8 +67,7 @@ int main() {
   getmaxyx(window, maxY, maxX);
 
   // init bird object.
-  Bird bird = {
-      "Crappy Bird", {(int)(maxY / 2), (int)(maxX / 2)}, {0, 0}, BIRD_SPRITE};
+  Bird bird = {"Crappy Bird", {0, (int)(maxY / 2)}, {0, 0}, BIRD_SPRITE};
 
   // User input.
   int key_pressed = wgetch(window);
