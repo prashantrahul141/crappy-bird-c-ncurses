@@ -193,6 +193,14 @@ int main() {
 
     // drawing.
     render_frame_counter();
+
+    // drawing pipes.
+    p_temp = pipes;
+    for (size_t i = 0; i < TOTAL_PIPES; i++) {
+      render_pipe(window, p_temp, maxX, maxY);
+      p_temp++;
+    }
+
     render_bird(window, &bird);
 
     // sleep, locks the fps at FPS_MAX.
