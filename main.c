@@ -67,14 +67,12 @@ uint32_t random_x_pos(uint32_t maxX) { return maxX + (rand() % 200); }
 // @brief resets initial pipes data.
 // @param Pipes pointer to all pipe objects array.
 // @param maxY Y screen size for calculating pipe height.
-void reset_pipes(Pipe *pipes, int maxY) {
-  for (int i = 0; i < TOTAL_PIPES; i++) {
-    pipes->pos.x = 0;
-    pipes->pos.y = 0;
-    pipes->isTop = (rand() % 10) + 1 > 5 ? false : true;
-    pipes->height = rand() % (maxY / 2);
-    pipes++;
-  }
+// @param maxX X screen size for calculating pipe height.
+void reset_pipe(Pipe *pipe, uint32_t maxX, uint32_t maxY) {
+  pipe->pos.x = random_x_pox(maxX);
+  pipe->pos.y = 0;
+  pipe->isTop = rand() & 1;
+  pipe->height = random_height(maxY);
 }
 
 // entry point.
@@ -110,7 +108,12 @@ int main() {
 
   // init pipes.
   Pipe pipes[TOTAL_PIPES];
-  reset_pipes(pipes, maxY);
+  Pipe *p_temp = pipes;
+  // reset all pipes.
+  for (size_t i = 0; i < TOTAL_PIPES; i++) {
+    reset_pipe(p_temp, maxX, maxY);
+    p_temp++;
+  }
 
   // User input.
   uint32_t key_pressed = wgetch(window);
