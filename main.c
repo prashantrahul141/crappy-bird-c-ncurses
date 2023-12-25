@@ -51,6 +51,16 @@ void render_bird(WINDOW *w, Bird *_b) {
   attroff(A_BOLD);
 }
 
+// @brief function to render a pipe.
+// @param Pipe pipe object to render.
+void render_pipe(WINDOW *w, Pipe *r_pipe, uint32_t maxX, uint32_t maxY) {
+  if (r_pipe->pos.x < maxX - PIPE_SPRITE_LENGTH) {
+    uint32_t _y = r_pipe->isTop ? 0 : maxY - r_pipe->height;
+    for (size_t i = 0; i < r_pipe->height; i++) {
+      mvwprintw(w, _y + i, r_pipe->pos.x, "%s", PIPE_SPRITE);
+    }
+  }
+}
 
 // @brief function to render current frame counter at the top left corner of the
 // screen.
