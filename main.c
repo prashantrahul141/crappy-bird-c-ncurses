@@ -56,6 +56,14 @@ void render_bird(WINDOW *w, Bird *_b) {
 // screen.
 void render_frame_counter() { printw("%ld", frameCounter); }
 
+// @brief get random height for pipe.
+uint32_t random_height(uint32_t maxY) {
+  return (maxY / 4) + (rand() % maxY / 2);
+}
+
+// @brief get random x position for pipe.
+uint32_t random_x_pos(uint32_t maxX) { return maxX + (rand() % 200); }
+
 // @brief resets initial pipes data.
 // @param Pipes pointer to all pipe objects array.
 // @param maxY Y screen size for calculating pipe height.
