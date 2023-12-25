@@ -79,7 +79,7 @@ uint32_t random_x_pos(uint32_t maxX) { return maxX + (rand() % 200); }
 // @param maxY Y screen size for calculating pipe height.
 // @param maxX X screen size for calculating pipe height.
 void reset_pipe(Pipe *pipe, uint32_t maxX, uint32_t maxY) {
-  pipe->pos.x = random_x_pox(maxX);
+  pipe->pos.x = random_x_pos(maxX);
   pipe->pos.y = 0;
   pipe->isTop = rand() & 1;
   pipe->height = random_height(maxY);
