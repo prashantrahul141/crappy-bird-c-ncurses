@@ -152,7 +152,7 @@ int main() {
     }
 
     // process user input.
-    if (key_pressed == KEY_SPACE && frameCounter - frameJumpedOn > 10) {
+    if (key_pressed == KEY_SPACE && frameCounter - frameJumpedOn > JUMP_DELAY) {
       // if user presses space.
       frameJumpedOn = frameCounter;
       bird.vel.y = -JUMP_ACCELERATION;
@@ -192,7 +192,7 @@ int main() {
     }
 
     // drawing.
-    render_frame_counter();
+    render_frame_counter(); // drawing frame counter.
 
     // drawing pipes.
     p_temp = pipes;
@@ -201,9 +201,11 @@ int main() {
       p_temp++;
     }
 
+    // render bird.
     render_bird(window, &bird);
 
-    // sleep, locks the fps at FPS_MAX.
+    // sleep, locks the fps at FPS_MAX, dont need it because of timeout set to
+    // getchw.
     // usleep(ONE_SECOND / MAX_FPS);
 
     // update frame counter.
@@ -213,5 +215,5 @@ int main() {
   // closes window and clears up ncurses stuff.
   endwin();
 
-  return 0;
+  return EXIT_SUCCESS;
 }
