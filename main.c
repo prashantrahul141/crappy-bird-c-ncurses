@@ -30,6 +30,11 @@ const char*CRAPPY_LOGO =
 "|      _||    __  ||       ||    ___||    ___||_     _|  |  _   | |   | |    __  || |_|   |\n"
 "|     |_ |   |  | ||   _   ||   |    |   |      |   |    | |_|   ||   | |   |  | ||       |\n"
 "|_______||___|  |_||__| |__||___|    |___|      |___|    |_______||___| |___|  |_||______| \n";
+
+const char*WELCOME_TEXT = "\nPress 'p' to play.\n"
+  "Press 'q' to quit.\n"
+  "How to play? just spam space.\n";
+
 // clang-format on
 
 uint64_t frameCounter = 0;
@@ -57,6 +62,7 @@ typedef struct Pipe {
 // @brief renders paused screen stuff.
 void render_pause_menu(WINDOW *w, uint32_t maxX, uint32_t maxY) {
   mvwprintw(w, maxY / 2, maxX / 2, "%s", CRAPPY_LOGO);
+  mvwprintw(w, maxY / 2 + 10, maxX / 2, "%s", WELCOME_TEXT);
 }
 
 // @brief function to print the bird at its current position.
