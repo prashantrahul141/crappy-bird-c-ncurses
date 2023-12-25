@@ -1,9 +1,11 @@
 #include <curses.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #define BIRD_SPRITE "***"
+
 #define MAX_FPS 30
 #define ONE_SECOND 1000000
 #define ONE_SECOND_MS 1000
@@ -12,6 +14,7 @@
 #define KEY_SPACE ' '
 #define JUMP_ACCELERATION 1.2
 #define MAX_Y_VELOCITY 1
+#define TOTAL_PIPES 4
 
 uint64_t frameCounter = 0;
 
@@ -28,6 +31,13 @@ typedef struct Bird {
   char *sprite;
 } Bird;
 
+// @brief struct to hold pipes data.
+typedef struct Pipe {
+  Vec2 pos;
+  uint32_t height;
+  bool isTop;
+} Pipe;
+
 // @brief function to print the bird at its current position.
 // @param Bird Bird object
 void print_bird(WINDOW *w, Bird *_b) {
@@ -37,6 +47,19 @@ void print_bird(WINDOW *w, Bird *_b) {
 }
 
 void print_frame_counter() { printw("%ld", frameCounter); }
+
+// @brief resets initial pipes data.
+// @param Pipes pointer to all pipe objects array.
+// @param maxY Y screen size for calculating pipe height.
+void reset_pipes(Pipe *pipes, int maxY) {
+  for (int i = 0; i < TOTAL_PIPES; i++) {
+    pipes->pos.x = 0;
+    pipes->pos.y = 0;
+    pipes->isTop = (rand() % 10) + 1 > 5 ? false : true;
+    pipes->height = rand() % (maxY / 2);
+    pipes++;
+  }
+}
 
 // entry point.
 int main() {
@@ -68,6 +91,10 @@ int main() {
 
   // init bird object.
   Bird bird = {"Crappy Bird", {0, (int)(maxY / 2)}, {0, 0}, BIRD_SPRITE};
+
+  // init pipes.
+  Pipe pipes[TOTAL_PIPES];
+  reset_pipes(pipes, maxY);
 
   // User input.
   uint32_t key_pressed = wgetch(window);
@@ -106,9 +133,7 @@ int main() {
     }
 
     // clamping velocity.
-    if (bird.vel.y > MAX_Y_VELOCITY) {
-      bird.vel.y = MAX_Y_VELOCITY;
-    }
+    bird.vel.y = bird.vel.y > MAX_Y_VELOCITY ? MAX_Y_VELOCITY : bird.vel.y;
 
     // clamping position to screensize.
     if (bird.pos.y > maxY - 2) {
