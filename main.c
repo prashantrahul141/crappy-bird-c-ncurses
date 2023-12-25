@@ -21,6 +21,17 @@
 #define PIPE_SPRITE "*******"
 #define PIPE_SPRITE_LENGTH 7
 
+// clang-format off
+const char*CRAPPY_LOGO = 
+"\n_______  ______    _______  _______  _______  __   __    _______  ___   ______    ______  \n"
+"|       ||    _ |  |   _   ||       ||       ||  | |  |  |  _    ||   | |    _ |  |      | \n"
+"|       ||   | ||  |  |_|  ||    _  ||    _  ||  |_|  |  | |_|   ||   | |   | ||  |  _    |\n"
+"|       ||   |_||_ |       ||   |_| ||   |_| ||       |  |       ||   | |   |_||_ | | |   |\n"
+"|      _||    __  ||       ||    ___||    ___||_     _|  |  _   | |   | |    __  || |_|   |\n"
+"|     |_ |   |  | ||   _   ||   |    |   |      |   |    | |_|   ||   | |   |  | ||       |\n"
+"|_______||___|  |_||__| |__||___|    |___|      |___|    |_______||___| |___|  |_||______| \n";
+// clang-format on
+
 uint64_t frameCounter = 0;
 
 // @brief Vec2 acts as a 2 dimensional vector type.
@@ -42,6 +53,11 @@ typedef struct Pipe {
   uint32_t height;
   bool isTop;
 } Pipe;
+
+// @brief renders paused screen stuff.
+void render_pause_menu(WINDOW *w, uint32_t maxX, uint32_t maxY) {
+  mvwprintw(w, maxY / 2, maxX / 2, "%s", CRAPPY_LOGO);
+}
 
 // @brief function to print the bird at its current position.
 // @param Bird Bird object
@@ -131,6 +147,7 @@ int main() {
   // main loop.
   bool runGame = true;
   uint32_t frameJumpedOn = 0;
+  bool gamePaused = true;
 
   // main game loop.
   while (runGame) {
@@ -149,6 +166,16 @@ int main() {
         key_pressed == 'q') {
       runGame = false;
       break;
+    }
+
+    // if p is pressed.
+    if ((uint32_t)key_pressed == 'p' || key_pressed == 'P') {
+      gamePaused = !gamePaused;
+    }
+
+    if (gamePaused) {
+      render_pause_menu(window, maxX, maxY);
+      continue;
     }
 
     // process user input.
