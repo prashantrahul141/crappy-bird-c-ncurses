@@ -175,6 +175,22 @@ int main() {
     bird.pos.x += bird.vel.x;
     bird.pos.y += bird.vel.y;
 
+    // updating pipes
+    p_temp = pipes;
+    for (size_t i = 0; i < TOTAL_PIPES; i++) {
+      p_temp->pos.x--;
+      p_temp++;
+    }
+
+    // checking for dead pipes.
+    p_temp = pipes;
+    for (size_t i = 0; i < TOTAL_PIPES; i++) {
+      if (p_temp->pos.x <= 0) {
+        reset_pipe(p_temp, maxX, maxY);
+      }
+      p_temp++;
+    }
+
     // drawing.
     render_frame_counter();
     render_bird(window, &bird);
