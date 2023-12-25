@@ -4,17 +4,22 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#define BIRD_SPRITE "***"
-
-#define MAX_FPS 30
-#define ONE_SECOND 1000000
-#define ONE_SECOND_MS 1000
+// basic game configurations.
+#define MAX_FPS 45
+#define JUMP_DELAY 8
 #define GRAVITY 0.07
-#define KEY_ESC 27
-#define KEY_SPACE ' '
+#define TOTAL_PIPES 5
 #define JUMP_ACCELERATION 1.2
 #define MAX_Y_VELOCITY 1
-#define TOTAL_PIPES 4
+
+// other configurations.
+#define BIRD_SPRITE "***"
+#define ONE_SECOND 1000000
+#define ONE_SECOND_MS 1000
+#define KEY_ESC 27
+#define KEY_SPACE ' '
+#define PIPE_SPRITE "*******"
+#define PIPE_SPRITE_LENGTH 7
 
 uint64_t frameCounter = 0;
 
