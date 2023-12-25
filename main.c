@@ -40,13 +40,16 @@ typedef struct Pipe {
 
 // @brief function to print the bird at its current position.
 // @param Bird Bird object
-void print_bird(WINDOW *w, Bird *_b) {
+void render_bird(WINDOW *w, Bird *_b) {
   attron(A_BOLD);
   mvwprintw(w, _b->pos.y, _b->pos.x, "%s", _b->sprite);
   attroff(A_BOLD);
 }
 
-void print_frame_counter() { printw("%ld", frameCounter); }
+
+// @brief function to render current frame counter at the top left corner of the
+// screen.
+void render_frame_counter() { printw("%ld", frameCounter); }
 
 // @brief resets initial pipes data.
 // @param Pipes pointer to all pipe objects array.
@@ -147,8 +150,8 @@ int main() {
     bird.pos.y += bird.vel.y;
 
     // drawing.
-    // print_frame_counter();
-    print_bird(window, &bird);
+    render_frame_counter();
+    render_bird(window, &bird);
 
     // sleep, locks the fps at FPS_MAX.
     // usleep(ONE_SECOND / MAX_FPS);
