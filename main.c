@@ -63,9 +63,13 @@ typedef struct Pipe {
 } Pipe;
 
 // @brief renders paused screen stuff.
-void render_pause_menu(WINDOW *w, uint32_t maxX, uint32_t maxY) {
+void render_pause_menu(WINDOW *w, uint32_t maxX, uint32_t maxY,
+                       bool renderGameOverText) {
   mvwprintw(w, maxY / 2, maxX / 2, "%s", CRAPPY_LOGO);
-  mvwprintw(w, maxY / 2 + 10, maxX / 2, "%s", WELCOME_TEXT);
+  if (renderGameOverText) {
+    mvwprintw(w, maxY / 2 + 10, maxX / 2, "Game Over");
+  }
+  mvwprintw(w, maxY / 2 + 20, maxX / 2, "%s", WELCOME_TEXT);
 }
 
 // @brief function to print the bird at its current position.
@@ -158,6 +162,7 @@ int main() {
   uint32_t frameJumpedOn = 0;
   bool gamePaused = true;
   double speedMultiplier = 0.7;
+  bool gameOverText = false;
 
   // main game loop.
   while (runGame) {
@@ -182,9 +187,32 @@ int main() {
       gamePaused = !gamePaused;
     }
 
+    // when the game is paused or over.
     if (gamePaused) {
-      render_pause_menu(window, maxX, maxY);
+
+      // resetting stuff after a gameover.
+      if (gameOverText) {
+
+        bird.pos.x = 6;
+        bird.pos.y = (double)maxY / 2;
+        frameCounter = 0;
+        // resetting pipes.
+        p_temp = pipes;
+        for (size_t i = 0; i < TOTAL_PIPES; i++) {
+          reset_pipe(p_temp, maxX, maxY);
+          p_temp++;
+        }
+      }
+
+      // rendering pause menu.
+      render_pause_menu(window, maxX, maxY, gameOverText);
       continue;
+    }
+
+    // checking for collision with ground.
+    if (bird.pos.y >= maxY - 2) {
+      gamePaused = true;
+      gameOverText = true;
     }
 
     // process user input.
@@ -201,9 +229,7 @@ int main() {
     bird.vel.y = bird.vel.y > MAX_Y_VELOCITY ? MAX_Y_VELOCITY : bird.vel.y;
 
     // clamping position to screensize.
-    if (bird.pos.y > maxY - 2) {
-      bird.pos.y = maxY - 2;
-    } else if (bird.pos.y <= 1) {
+    if (bird.pos.y <= 1) {
       bird.pos.y = 1;
     }
 
