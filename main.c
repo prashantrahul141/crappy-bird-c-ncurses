@@ -93,7 +93,7 @@ void render_pipe(WINDOW *w, Pipe *r_pipe, uint32_t maxX, uint32_t maxY) {
 
 // @brief function to render current frame counter at the top left corner of the
 // screen.
-void render_frame_counter() { printw("Score: %ld", frameCounter); }
+void render_frame_counter() { mvprintw(0, 0, "Score: %ld", frameCounter); }
 
 // @brief get random height for pipe.
 uint32_t random_height(uint32_t maxY) {
@@ -259,7 +259,6 @@ int main() {
     }
 
     // drawing.
-    render_frame_counter(); // drawing frame counter.
 
     // drawing pipes.
     p_temp = pipes;
@@ -270,6 +269,9 @@ int main() {
 
     // render bird.
     render_bird(window, &bird);
+
+    // drawing frame counter.
+    render_frame_counter();
 
     // sleep, locks the fps at FPS_MAX, dont need it because of timeout set to
     // getchw.
