@@ -11,12 +11,15 @@
 #define TOTAL_PIPES 5
 #define JUMP_ACCELERATION 1.2
 #define MAX_Y_VELOCITY 1
+#define SPEED_INCREASE_MULTIPLIER 0.08
 
 // other configurations.
 #define BIRD_SPRITE "***"
 #define ONE_SECOND 1000000
 #define ONE_SECOND_MS 1000
 #define KEY_ESC 27
+#undef KEY_ENTER // remove default KEY_ENTER macro because it wasn't working.
+#define KEY_ENTER 10
 #define KEY_SPACE ' '
 #define PIPE_SPRITE "*******"
 #define PIPE_SPRITE_LENGTH 7
@@ -31,8 +34,8 @@ const char*CRAPPY_LOGO =
 "|     |_ |   |  | ||   _   ||   |    |   |      |   |    | |_|   ||   | |   |  | ||       |\n"
 "|_______||___|  |_||__| |__||___|    |___|      |___|    |_______||___| |___|  |_||______| \n";
 
-const char*WELCOME_TEXT = "\nPress 'p' to play.\n"
-  "Press 'q' to quit.\n"
+const char*WELCOME_TEXT = "\nPress 'p' or ENTER to play.\n"
+  "Press 'q' or ESC to quit.\n"
   "How to play? just spam space.\n";
 
 // clang-format on
@@ -86,11 +89,11 @@ void render_pipe(WINDOW *w, Pipe *r_pipe, uint32_t maxX, uint32_t maxY) {
 
 // @brief function to render current frame counter at the top left corner of the
 // screen.
-void render_frame_counter() { printw("%ld", frameCounter); }
+void render_frame_counter() { printw("Score: %ld", frameCounter); }
 
 // @brief get random height for pipe.
 uint32_t random_height(uint32_t maxY) {
-  return (maxY / 4) + (rand() % maxY / 2);
+  return (maxY / 4) + (rand() % maxY / 3);
 }
 
 // @brief get random x position for pipe.
@@ -136,7 +139,7 @@ int main() {
   getmaxyx(window, maxY, maxX);
 
   // init bird object.
-  Bird bird = {"Crappy Bird", {0, (int)(maxY / 2)}, {0, 0}, BIRD_SPRITE};
+  Bird bird = {"Crappy Bird", {5, (int)(maxY / 2)}, {0, 0}, BIRD_SPRITE};
 
   // init pipes.
   Pipe pipes[TOTAL_PIPES];
@@ -154,6 +157,7 @@ int main() {
   bool runGame = true;
   uint32_t frameJumpedOn = 0;
   bool gamePaused = true;
+  double speedMultiplier = 0.7;
 
   // main game loop.
   while (runGame) {
@@ -168,14 +172,13 @@ int main() {
     wrefresh(window);
 
     // if esc is pressed
-    if ((uint32_t)key_pressed == KEY_ESC || key_pressed == 'Q' ||
-        key_pressed == 'q') {
+    if (key_pressed == KEY_ESC || key_pressed == 'Q' || key_pressed == 'q') {
       runGame = false;
       break;
     }
 
     // if p is pressed.
-    if ((uint32_t)key_pressed == 'p' || key_pressed == 'P') {
+    if (key_pressed == KEY_ENTER || key_pressed == 'p' || key_pressed == 'P') {
       gamePaused = !gamePaused;
     }
 
@@ -208,10 +211,15 @@ int main() {
     bird.pos.x += bird.vel.x;
     bird.pos.y += bird.vel.y;
 
+    // updating speedMultiplier every 100 frames.
+    if (frameCounter % 100 == 0) {
+      speedMultiplier += SPEED_INCREASE_MULTIPLIER;
+    }
+
     // updating pipes
     p_temp = pipes;
     for (size_t i = 0; i < TOTAL_PIPES; i++) {
-      p_temp->pos.x--;
+      p_temp->pos.x = p_temp->pos.x - speedMultiplier;
       p_temp++;
     }
 
