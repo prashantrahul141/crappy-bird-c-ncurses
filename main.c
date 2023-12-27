@@ -114,6 +114,14 @@ void reset_pipe(Pipe *pipe, uint32_t maxX, uint32_t maxY) {
   pipe->height = random_height(maxY);
 }
 
+// @brief Detects collision between the bird and a pipe object.
+// @param Bird the bird object.
+// @param Pipe the pipe object to check collision against.
+bool detect_collision(Bird *bird, Pipe *pipe) {
+
+  return true;
+}
+
 // entry point.
 int main() {
 
@@ -193,6 +201,7 @@ int main() {
       // resetting stuff after a gameover.
       if (gameOverText) {
 
+        speedMultiplier = 0.7;
         bird.pos.x = 6;
         bird.pos.y = (double)maxY / 2;
         frameCounter = 0;
@@ -213,6 +222,16 @@ int main() {
     if (bird.pos.y >= maxY - 2) {
       gamePaused = true;
       gameOverText = true;
+    }
+
+    // checking for collision with pipes.
+    p_temp = pipes;
+    for (size_t i = 0; i < TOTAL_PIPES; i++) {
+      if (detect_collision(&bird, p_temp)) {
+        gamePaused = true;
+        gameOverText = true;
+      };
+      p_temp++;
     }
 
     // process user input.
