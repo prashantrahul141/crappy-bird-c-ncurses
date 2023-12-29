@@ -105,17 +105,17 @@ uint32_t random_x_pos() { return maxX + (rand() % 200); }
 // @brief resets initial pipes data.
 // @param Pipes pointer to all pipe objects array.
 void reset_pipe(Pipe *pipe) {
-  pipe->pos.x = random_x_pos(maxX);
+  pipe->pos.x = random_x_pos();
   pipe->pos.y = 0;
   pipe->isTop = rand() & 1;
-  pipe->height = random_height(maxY);
+  pipe->height = random_height();
 }
 
 // @brief resets initial values of a bird object.
 // @param Bird pointers to the bird object to reset.
 void reset_bird(Bird *bird) {
   bird->pos.x = 5;
-  bird->pos.y = maxY / 2;
+  bird->pos.y = (double)maxY / 2;
   bird->vel.x = 0;
   bird->vel.y = 0;
   bird->sprite = BIRD_SPRITE;
