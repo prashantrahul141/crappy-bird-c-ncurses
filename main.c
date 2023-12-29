@@ -49,7 +49,6 @@ typedef struct Vec2 {
 
 // @brief Main bird struct to holds its properties.
 typedef struct Bird {
-  char *name;
   Vec2 pos;
   Vec2 vel;
   char *sprite;
@@ -114,6 +113,16 @@ void reset_pipe(Pipe *pipe, uint32_t maxX, uint32_t maxY) {
   pipe->height = random_height(maxY);
 }
 
+// @brief resets initial values of a bird object.
+// @param Bird pointers to the bird object to reset.
+void reset_bird(Bird *bird, double maxY) {
+  bird->pos.x = 5;
+  bird->pos.y = maxY / 2;
+  bird->vel.x = 0;
+  bird->vel.y = 0;
+  bird->sprite = BIRD_SPRITE;
+}
+
 // @brief Detects collision between the bird and a pipe object.
 // @param Bird the bird object.
 // @param Pipe the pipe object to check collision against.
@@ -151,7 +160,8 @@ int main() {
   getmaxyx(window, maxY, maxX);
 
   // init bird object.
-  Bird bird = {"Crappy Bird", {5, (int)(maxY / 2)}, {0, 0}, BIRD_SPRITE};
+  Bird bird;
+  reset_bird(&bird, maxY);
 
   // init pipes.
   Pipe pipes[TOTAL_PIPES];
@@ -200,10 +210,9 @@ int main() {
 
       // resetting stuff after a gameover.
       if (gameOverText) {
+        reset_bird(&bird, maxY);
 
         speedMultiplier = 0.7;
-        bird.pos.x = 6;
-        bird.pos.y = (double)maxY / 2;
         frameCounter = 0;
         // resetting pipes.
         p_temp = pipes;
