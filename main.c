@@ -24,6 +24,9 @@
 #define PIPE_SPRITE "*******"
 #define PIPE_SPRITE_LENGTH 7
 
+// max screen width and height.
+uint32_t maxY, maxX;
+
 // clang-format off
 const char*CRAPPY_LOGO = 
 "\n_______  ______    _______  _______  _______  __   __    _______  ___   ______    ______  \n"
@@ -62,8 +65,7 @@ typedef struct Pipe {
 } Pipe;
 
 // @brief renders paused screen stuff.
-void render_pause_menu(WINDOW *w, uint32_t maxX, uint32_t maxY,
-                       bool renderGameOverText) {
+void render_pause_menu(WINDOW *w, bool renderGameOverText) {
   mvwprintw(w, maxY / 2, maxX / 2, "%s", CRAPPY_LOGO);
   if (renderGameOverText) {
     mvwprintw(w, maxY / 2 + 10, maxX / 2, "Game Over");
@@ -81,7 +83,7 @@ void render_bird(WINDOW *w, Bird *_b) {
 
 // @brief function to render a pipe.
 // @param Pipe pipe object to render.
-void render_pipe(WINDOW *w, Pipe *r_pipe, uint32_t maxX, uint32_t maxY) {
+void render_pipe(WINDOW *w, Pipe *r_pipe) {
   if (r_pipe->pos.x < maxX - PIPE_SPRITE_LENGTH) {
     uint32_t _y = r_pipe->isTop ? 0 : maxY - r_pipe->height;
     for (size_t i = 0; i < r_pipe->height; i++) {
@@ -95,18 +97,14 @@ void render_pipe(WINDOW *w, Pipe *r_pipe, uint32_t maxX, uint32_t maxY) {
 void render_frame_counter() { mvprintw(0, 0, "Score: %ld", frameCounter); }
 
 // @brief get random height for pipe.
-uint32_t random_height(uint32_t maxY) {
-  return (maxY / 4) + (rand() % maxY / 3);
-}
+uint32_t random_height() { return (maxY / 4) + (rand() % maxY / 3); }
 
 // @brief get random x position for pipe.
-uint32_t random_x_pos(uint32_t maxX) { return maxX + (rand() % 200); }
+uint32_t random_x_pos() { return maxX + (rand() % 200); }
 
 // @brief resets initial pipes data.
 // @param Pipes pointer to all pipe objects array.
-// @param maxY Y screen size for calculating pipe height.
-// @param maxX X screen size for calculating pipe height.
-void reset_pipe(Pipe *pipe, uint32_t maxX, uint32_t maxY) {
+void reset_pipe(Pipe *pipe) {
   pipe->pos.x = random_x_pos(maxX);
   pipe->pos.y = 0;
   pipe->isTop = rand() & 1;
@@ -115,7 +113,7 @@ void reset_pipe(Pipe *pipe, uint32_t maxX, uint32_t maxY) {
 
 // @brief resets initial values of a bird object.
 // @param Bird pointers to the bird object to reset.
-void reset_bird(Bird *bird, double maxY) {
+void reset_bird(Bird *bird) {
   bird->pos.x = 5;
   bird->pos.y = maxY / 2;
   bird->vel.x = 0;
@@ -156,19 +154,18 @@ int main() {
   wtimeout(window, ONE_SECOND_MS / MAX_FPS);
 
   // max width and height of the window.
-  uint32_t maxY, maxX;
   getmaxyx(window, maxY, maxX);
 
   // init bird object.
   Bird bird;
-  reset_bird(&bird, maxY);
+  reset_bird(&bird);
 
   // init pipes.
   Pipe pipes[TOTAL_PIPES];
   Pipe *p_temp = pipes;
   // reset all pipes.
   for (size_t i = 0; i < TOTAL_PIPES; i++) {
-    reset_pipe(p_temp, maxX, maxY);
+    reset_pipe(p_temp);
     p_temp++;
   }
 
@@ -210,20 +207,20 @@ int main() {
 
       // resetting stuff after a gameover.
       if (gameOverText) {
-        reset_bird(&bird, maxY);
+        reset_bird(&bird);
 
         speedMultiplier = 0.7;
         frameCounter = 0;
         // resetting pipes.
         p_temp = pipes;
         for (size_t i = 0; i < TOTAL_PIPES; i++) {
-          reset_pipe(p_temp, maxX, maxY);
+          reset_pipe(p_temp);
           p_temp++;
         }
       }
 
       // rendering pause menu.
-      render_pause_menu(window, maxX, maxY, gameOverText);
+      render_pause_menu(window, gameOverText);
       continue;
     }
 
@@ -281,7 +278,7 @@ int main() {
     p_temp = pipes;
     for (size_t i = 0; i < TOTAL_PIPES; i++) {
       if (p_temp->pos.x <= 0) {
-        reset_pipe(p_temp, maxX, maxY);
+        reset_pipe(p_temp);
       }
       p_temp++;
     }
@@ -291,7 +288,7 @@ int main() {
     // drawing pipes.
     p_temp = pipes;
     for (size_t i = 0; i < TOTAL_PIPES; i++) {
-      render_pipe(window, p_temp, maxX, maxY);
+      render_pipe(window, p_temp);
       p_temp++;
     }
 
