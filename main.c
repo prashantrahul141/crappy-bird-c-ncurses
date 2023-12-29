@@ -1,4 +1,5 @@
 #include <curses.h>
+#include <math.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -12,6 +13,7 @@
 #define JUMP_ACCELERATION 1.2
 #define MAX_Y_VELOCITY 1
 #define SPEED_INCREASE_MULTIPLIER 0.08
+#define ERROR_ROOM 2
 
 // other configurations.
 #define BIRD_SPRITE "***"
@@ -125,8 +127,26 @@ void reset_bird(Bird *bird) {
 // @param Bird the bird object.
 // @param Pipe the pipe object to check collision against.
 bool detect_collision(Bird *bird, Pipe *pipe) {
+  // horizontal collision
+  bool horizontal_col =
+      fabs(pipe->pos.x - bird->pos.x) < PIPE_SPRITE_LENGTH - ERROR_ROOM;
 
-  return true;
+  // vertical collision
+  if (pipe->isTop) {
+    return (pipe->height - bird->pos.y > 2) && horizontal_col;
+  } else {
+    return (maxY - pipe->height < bird->pos.y) && horizontal_col;
+  }
+
+  bool vertical_col =
+      pipe->isTop
+          ?
+          // if the pipe is at top.
+          abs((int)(pipe->height - bird->pos.y)) > ERROR_ROOM
+          // if the pipe is at bottom.
+          : abs((int)((maxY - pipe->height) - bird->pos.y)) < ERROR_ROOM;
+
+  return vertical_col && horizontal_col;
 }
 
 // entry point.
