@@ -30,7 +30,7 @@
 uint32_t maxY, maxX;
 
 // clang-format off
-const char*CRAPPY_LOGO = 
+const char *CRAPPY_LOGO = 
 "\n_______  ______    _______  _______  _______  __   __    _______  ___   ______    ______  \n"
 "|       ||    _ |  |   _   ||       ||       ||  | |  |  |  _    ||   | |    _ |  |      | \n"
 "|       ||   | ||  |  |_|  ||    _  ||    _  ||  |_|  |  | |_|   ||   | |   | ||  |  _    |\n"
@@ -38,8 +38,8 @@ const char*CRAPPY_LOGO =
 "|      _||    __  ||       ||    ___||    ___||_     _|  |  _   | |   | |    __  || |_|   |\n"
 "|     |_ |   |  | ||   _   ||   |    |   |      |   |    | |_|   ||   | |   |  | ||       |\n"
 "|_______||___|  |_||__| |__||___|    |___|      |___|    |_______||___| |___|  |_||______| \n";
-
-const char*WELCOME_TEXT = "\nPress 'p' or ENTER to play.\n"
+ 
+const char *WELCOME_TEXT = "\nPress 'p' or ENTER to play.\n"
   "Press 'q' or ESC to quit.\n"
   "How to play? just spam space.\n";
 
@@ -132,12 +132,6 @@ bool detect_collision(Bird *bird, Pipe *pipe) {
       fabs(pipe->pos.x - bird->pos.x) < PIPE_SPRITE_LENGTH - ERROR_ROOM;
 
   // vertical collision
-  if (pipe->isTop) {
-    return (pipe->height - bird->pos.y > 2) && horizontal_col;
-  } else {
-    return (maxY - pipe->height < bird->pos.y) && horizontal_col;
-  }
-
   bool vertical_col =
       pipe->isTop
           ?
