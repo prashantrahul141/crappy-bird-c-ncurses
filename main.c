@@ -133,12 +133,11 @@ bool detect_collision(Bird *bird, Pipe *pipe) {
 
   // vertical collision
   bool vertical_col =
-      pipe->isTop
-          ?
-          // if the pipe is at top.
-          abs((int)(pipe->height - bird->pos.y)) > ERROR_ROOM
-          // if the pipe is at bottom.
-          : abs((int)((maxY - pipe->height) - bird->pos.y)) < ERROR_ROOM;
+      pipe->isTop ?
+                  // if the pipe is at top.
+          pipe->height - bird->pos.y > ERROR_ROOM
+                  // if the pipe is at bottom.
+                  : (int)((maxY - pipe->height) - bird->pos.y) < ERROR_ROOM;
 
   return vertical_col && horizontal_col;
 }
@@ -239,7 +238,7 @@ int main() {
     }
 
     // checking for collision with ground.
-    if (bird.pos.y >= maxY - 2) {
+    if (bird.pos.y >= maxY + 6) {
       gamePaused = true;
       gameOverText = true;
     }
